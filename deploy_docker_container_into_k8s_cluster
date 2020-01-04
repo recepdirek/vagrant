@@ -1,0 +1,30 @@
+
+we are using the vagrant server which we created in previous step
+
+1- download docker software
+sudo apt-get install docker.io 
+
+2. install git and docker-demo 
+sudo apt-get install git 
+
+git clone https://github.com/wardviaene/docker-demo  
+
+
+3- Give docker build permission to vagrant user
+
+sudo usermod -G docker vagrant
+
+4- create docker image with dockerfile
+
+cd docker-demo
+docker build .
+
+5 -run docker image ( you need image id )
+docker run -p 3000:3000 -it 8378fec9d17a
+
+6. push your image into docker hub
+docker login
+docker tag 6b5991bf650f 2583/docker-demo
+docker push 2583/docker-demo 
+
+
