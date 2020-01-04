@@ -16,6 +16,8 @@ vagrant up
 or 
 vagrant up --provider=virtualbox
 
+you may need to disable hyper-v on windows : 
+bcdedit /set hypervisorlaunchtype off
 
 
 install kops
