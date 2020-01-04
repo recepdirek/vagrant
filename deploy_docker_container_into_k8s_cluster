@@ -15,6 +15,17 @@ git clone https://github.com/wardviaene/docker-demo
 sudo usermod -G docker vagrant
 
 4- create docker image with dockerfile
+dockerfile
+============
+
+FROM node:12
+WORKDIR /app
+ADD . /app
+RUN npm install
+EXPOSE 3000
+CMD npm start
+
+
 
 cd docker-demo
 docker build .
