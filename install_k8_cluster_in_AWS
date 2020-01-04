@@ -1,0 +1,119 @@
+1. install virtualbox
+https://www.virtualbox.org/wiki/Download_Old_Builds_5_2
+
+2. install vagrant 
+https://www.vagrantup.com/downloads.html
+
+3. create directory 
+mkdir ubuntu
+cd ubuntu
+
+4. initialize
+vagrant init ubunut/xenial64
+
+4. startup linux 
+vagrant up 
+or 
+vagrant up --provider=virtualbox
+
+
+
+install kops
+curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64 
+chmod +x kops-linux-amd64
+sudo mv kops-linux-amd64 /usr/local/bin/kops
+
+install python-pip
+
+sudo apt-get update 
+sudo apt-get install python-pip
+
+install awscli
+sudo pip install awscli
+
+configure aws
+===========================================
+create and IAM user with admin privilege
+
+in your linux marchine configure user and password
+aws configure 
+enter key
+enter access key
+
+vagrant@ubuntu-xenial:~$ aws iam get-user
+{
+    "User": {
+        "UserName": "kops",
+        "Path": "/",
+        "CreateDate": "2020-01-04T13:40:40Z",
+        "UserId": "AIDAWVE45S2QQPCBFQT6B",
+        "Arn": "arn:aws:iam::457743111841:user/kops"
+    }
+}
+vagrant@ubuntu-xenial:~$
+
+
+
+
+install kubectl
+ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl  
+ chmod +x ./kubectl
+ sudo mv ./kubectl /usr/local/bin/kubectl
+ 
+ 
+create public and private key
+ ssh-keygen -f .ssh/id_rsa
+
+create kubernetes cluster
+=====================================
+kops create cluster \
+  --name=mongodbjournal.com \
+  --state=s3://mongodbjournal.com \
+  --zones=eu-west-1a \
+  --node-count=2 \
+  --node-size=t2.micro \
+  --master-size=t2.micro \
+  --dns-zone=mongodbjournal.com
+
+  start cluster
+=======================================
+  kops update cluster --name mongodbjournal.com --yes --state=s3://mongodbjournal.com
+  
+deploy application
+=============================================  
+  kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+  kubectl expose deployment hello-minikube --type=NodePort
+  
+  
+  kubectl get service
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+hello-minikube   NodePort    100.64.57.103   <none>        8080:30216/TCP   9s
+kubernetes       ClusterIP   100.64.0.1      <none>        443/TCP          23m
+
+enable port 30216 in AWS security group
+
+add another application into cluster
+======================================
+kubectl \
+        create deployment my-nginx-deployment \
+        --image=nginx
+
+kubectl \
+        expose deployment my-nginx-deployment \
+        --port=80 \
+        --type=NodePort \
+        --name=my-nginx-service
+
+list all services
+==============================================
+ kubectl get service
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+hello-minikube     NodePort    100.64.57.103    <none>        8080:30216/TCP   9m36s
+kubernetes         ClusterIP   100.64.0.1       <none>        443/TCP          32m
+my-nginx-service   NodePort    100.69.240.164   <none>        80:30687/TCP     6s
+
+
+
+
+		
+    
