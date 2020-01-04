@@ -1,0 +1,17 @@
+1. install virtualbox
+https://www.virtualbox.org/wiki/Download_Old_Builds_5_2
+
+2. install vagrant 
+https://www.vagrantup.com/downloads.html
+
+3. create directory 
+mkdir ubuntu
+cd ubuntu
+
+4. initialize
+vagrant init ubunut/xenial64
+
+4. startup linux 
+vagrant up 
+or 
+vagrant up --provider=virtualbox
