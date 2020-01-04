@@ -114,6 +114,12 @@ my-nginx-service   NodePort    100.69.240.164   <none>        80:30687/TCP     6
 
 
 
+delete kubernetes cluster:
+============================
+kops delete cluster mongodbjournal.com --state=s3://mongodbjournal.com --yes
+
+
+
 
 		
     
