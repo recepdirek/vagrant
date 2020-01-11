@@ -9,7 +9,7 @@ mkdir ubuntu
 cd ubuntu
 
 4. initialize
-vagrant init ubunut/xenial64
+vagrant init ubuntu/xenial64
 
 4. startup linux 
 vagrant up 
